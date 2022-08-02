@@ -1,0 +1,31 @@
+.home-container {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+}
+
+.page-title {
+    margin: auto;
+    padding-top: 1%;
+    padding-bottom: 3%;
+}
+
+.notes-wrapper {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: start;
+    align-items: flex-start;
+    align-content: flex-start;
+    gap: 10px;
+    padding-left: 2%;
+}
+
+a:link, a:visited {
+    color: inherit;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+a:link:active, a:visited:active {
+cursor: pointer;
+}

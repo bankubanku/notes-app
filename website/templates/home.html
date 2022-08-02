@@ -1,0 +1,27 @@
+{% extends 'views_base.html' %} {% block stylesheet %}<link
+  rel="stylesheet"
+  href="../static/css/home.css"
+/>
+{% endblock stylesheet %} {% block title %}Home{% endblock title %} {% block
+content %}
+<div class="home-container">
+  <h1 class="page-title">{{username}}'s notes</h1>
+  <div class="notes-wrapper">
+    {% for note in notes %}
+      <div class="card" style="width: 18rem">
+        <div class="card-header">
+          <a class="btn-close" href="/delete/{{note.id}}" role="button" style="margin-right: 10px"></a>
+        </div>
+        <a href="/edit-note/{{note.id}}">
+          <div class="card-body">
+            <h5 class="card-title">{{note.title}}</h5>
+            <p class="card-text">{{note.note_content}}</p>
+          </div>
+        </a>
+      </div>
+
+    {% endfor %}
+  </div>
+</div>
+
+{% endblock content %}

@@ -1,0 +1,25 @@
+{% extends 'views_base.html' %} {% block title %}Create a new note{% endblock
+title %} {% block content %}
+<div class="note-container">
+  <form method="POST" class="note-form">
+    <input
+      type="text"
+      class="form-control mb-3"
+      id="title"
+      name="title"
+      placeholder="Title"
+      value="{% block note_title %}{% endblock note_title %}"
+    />
+    <textarea
+      class="form-control mb-4"
+      id="note"
+      name="note_content"
+      placeholder="Compose your note..."
+    >
+{% block note_content %}{% endblock note_content %}</textarea
+    >
+    <button class="btn btn-primary w-100 mb-3" type="submit">{% block btn_text %}Add note{% endblock btn_text %}</button>
+    <a class="btn btn-secondary w-100 mb-3" href="/" role="button">Back</a>
+  </form>
+</div>
+{% endblock content %}

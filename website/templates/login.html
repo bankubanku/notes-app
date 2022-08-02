@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% block title %}Login{% endblock title %}
+{% block content %}
+<div class="auth-container">
+    <form method="POST" class="auth-form">
+        <div class="mb-3">
+            <label for="emailOrUsername" class="form-label">Email or username:</label>
+            <input type="text" class="form-control" id="emailOrUsername" name="email" placeholder="Enter your email">
+        </div>
+        <div class="mb-1">
+            <label for="password" class="form-label">Password</label>
+            <input type="password" class="form-control" id="password" name="password" placeholder="Enter password">
+        </div>
+        <div class="forgot-password mb-4">
+            <p>Forgot password? Click <a href="/reset">here</a> to reset your password</p>
+        </div>
+        <input class="btn btn-primary w-100 mb-3" type="submit" value="Login">
+        <a class="btn btn-secondary w-100" href="/sign-up" role="button">Sign up</a>  
+    </form>
+{% endblock content %}

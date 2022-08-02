@@ -1,0 +1,72 @@
+.auth-container {
+    display: flex;
+    margin-top: 250px;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    justify-content: center;
+    align-items: center;
+}
+
+.note-container {
+    display: flex;
+    margin-top: 50px;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    justify-content: center;
+    align-items: flex-start;
+}
+
+
+.auth-form {
+    background-color: antiquewhite;
+    width: 500px;
+    padding: 3%;
+    border-radius: 3%;
+}
+
+.note-form {
+    margin: auto;
+    width: 600px;
+}
+
+#title {
+    font-size: 32px;
+}
+textarea {
+    resize: none;
+    height: 550px;
+}
+
+
+
+@media screen and (max-height: 875px) {
+    textarea {
+        height: 300px;
+    }
+}
+
+@media screen and (max-height: 575px) {
+    textarea {
+        height: 150px;
+    }
+}
+
+/* For Mobile */
+@media screen and (max-width: 640px) {
+    .auth-form {
+        width: 90%;
+    }
+
+    .auth-container {
+        margin-top: 100px;
+    }
+    
+    .note-form {
+        width: 90%;
+    }
+
+    .note-container {
+        margin-top: 5%;
+    }
+}
+
