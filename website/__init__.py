@@ -2,17 +2,19 @@ from flask import Flask
 from flask_login import LoginManager
 from os import path
 from flask_sqlalchemy import SQLAlchemy
-
+from flask_mail import Mail
 
 db = SQLAlchemy()
 DB_NAME = 'database.db'
-
+mail = Mail()
 
 def create_app():
-    app = Flask(__name__, instance_relative_config=True)
+    app = Flask(__name__)
+    app.config.from_pyfile('config.cfg')
     app.secret_key = 'secretkey'  # change later
     app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///{DB_NAME}'
     db.init_app(app)
+    mail.init_app(app)
 
     from .blueprints.auth import auth
     from .blueprints.views import views
@@ -39,3 +41,4 @@ def create_database(app):
     if not path.exists('website/' + DB_NAME):
         db.create_all(app=app)
         print('Created database')
+
