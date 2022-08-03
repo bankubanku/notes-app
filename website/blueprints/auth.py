@@ -1,10 +1,14 @@
 from flask import Blueprint, redirect, render_template, request, flash, url_for
 from ..models import User
-from .. import db
+from .. import db, mail
 from flask_login import login_user, logout_user, login_required, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
+from itsdangerous import URLSafeTimedSerializer, SignatureExpired
+from flask_mail import Message
 
 auth = Blueprint("auth", __name__)
+
+s = URLSafeTimedSerializer('secret-key', salt='confirm-email')
 
 
 @auth.route("/login", methods=['POST', 'GET'])
@@ -52,8 +56,19 @@ def sign_up():
         elif len(email) < 4:
             flash("Email is invalid.", category='error')
         else:
-            create_account(email, username, password1)
-            return redirect(url_for('views.home'))
+            creds = {"email": email, 
+                    "username": username,
+                    "password": password1}
+            token = s.dumps(creds)
+
+            msg = Message("Email verification",
+                          sender='youremail', recipients=[email])
+            link = url_for('auth.create_account', token=token, _external=True)
+            msg.body = 'Clik this link to create your account {}'.format(link)
+            mail.send(msg)
+
+            # create_account(email, username, password1)
+            # return redirect(url_for('views.home'))
     return render_template("sign_up.html")
 
 
@@ -64,13 +79,23 @@ def logout():
     return redirect(url_for('views.home'))
 
 
-@auth.route("/create-account", methods=['POST'])
-def create_account(email, username, password):
-    new_user = User(email=email, username=username,
-                    password=generate_password_hash(password, method='sha256'))
-    db.session.add(new_user)
-    db.session.commit()
-    login_user(new_user, remember=True)
-    flash('User created!')
+@auth.route("/create-account/<token>", methods=['POST', 'GET'])
+def create_account(token):
+    try:
+        creds = s.loads(token, max_age=3600)
+        email = creds["email"]
+        username = creds["username"]
+        password = creds["password"]
 
+        new_user = User(email=email, username=username,
+                    password=generate_password_hash(password, method='sha256'))
+        db.session.add(new_user)
+        db.session.commit()
+
+        login_user(new_user, remember=True)
+        flash('User created!')
+        return redirect(url_for('views.home'))
+
+    except SignatureExpired:
+        return redirect(url_for('auth.sign_up'))
 
