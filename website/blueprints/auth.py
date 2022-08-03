@@ -12,10 +12,8 @@ def login():
     if request.method == 'POST':
         email = request.form.get("email")
         password = request.form.get("password")
-        print(email)
-        print(password)
         user = User.query.filter_by(email=email).first()
-        print(user)
+
         if user:
             if check_password_hash(user.password, password):
                 flash("Logged in!", category='success')
@@ -54,16 +52,25 @@ def sign_up():
         elif len(email) < 4:
             flash("Email is invalid.", category='error')
         else:
-            new_user = User(email=email, username=username, password=generate_password_hash(password1, method='sha256'))
-            db.session.add(new_user)
-            db.session.commit()
-            flash('User created!')
-            return redirect(url_for('views.home')) # it looks like created user doesn't log in automaticaly
-
+            create_account(email, username, password1)
+            return redirect(url_for('views.home'))
     return render_template("sign_up.html")
+
 
 @auth.route("/logout")
 @login_required
 def logout():
     logout_user()
     return redirect(url_for('views.home'))
+
+
+@auth.route("/create-account", methods=['POST'])
+def create_account(email, username, password):
+    new_user = User(email=email, username=username,
+                    password=generate_password_hash(password, method='sha256'))
+    db.session.add(new_user)
+    db.session.commit()
+    login_user(new_user, remember=True)
+    flash('User created!')
+
+
